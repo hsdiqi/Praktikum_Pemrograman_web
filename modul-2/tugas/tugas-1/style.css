@@ -1,0 +1,93 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #7cc586;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+}
+
+.calculator {
+    width: 400px;
+    height: 550px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px #0000004d;
+    border: 2px solid #555555;
+}
+
+.calculator-screen {
+    width: 86%;
+    height: 100px;
+    background-color: #252525;
+    color: #fff;
+    text-align: right;
+    padding: 20px;
+    font-size: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 0 0 10px lightblue;
+}
+
+.calculation {
+    color: #aaa;
+    font-size: 1.2rem;
+}
+
+.result {
+    font-size: 2.4rem;
+}
+
+.calculator-keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Empat kolom */
+    grid-gap: 10px;
+    padding: 20px;
+    width: 80%;
+}
+
+button {
+    height: 60px;
+    font-size: 1.4rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #eaeaea;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button.operator {
+    background-color: #ff9500;
+    color: white;
+}
+
+button.equal-sign {
+    background-color: #00cc66;
+    color: white;
+    grid-column: span 1; /* Tombol = ada di kolom sendiri */
+}
+
+button.clear {
+    background-color: #ff3b30;
+    color: white;
+}
+
+button:active {
+    background-color: #d4d4d4;
+}
+
+button.operator:active, button.equal-sign:active, button.clear:active {
+    background-color: #ff6f00;
+}
+
+/* Lebar tombol 0 lebih besar */
+button[data-number="0"] {
+    grid-column: span 2;
+}
