@@ -3,7 +3,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #7cc586;
+    background-color: #313131;
     font-family: 'Arial', sans-serif;
     margin: 0;
 }
@@ -14,7 +14,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #fff;
+    background-color: #7e00af94;
     border-radius: 10px;
     box-shadow: 0 5px 15px #0000004d;
     border: 2px solid #555555;

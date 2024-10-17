@@ -19,7 +19,6 @@ function updateCalculationDisplay(value) {
   calculationDisplay.textContent = value;
 }
 
-// Handle angka yang ditekan
 document.querySelectorAll(".number").forEach((button) => {
   button.addEventListener("click", () => {
     currentInput += button.dataset.number;
@@ -31,7 +30,6 @@ document.querySelectorAll(".number").forEach((button) => {
   });
 });
 
-// Handle operator yang ditekan
 document.querySelectorAll(".operator").forEach((button) => {
   button.addEventListener("click", () => {
     if (currentInput === "") return;
@@ -46,11 +44,10 @@ document.querySelectorAll(".operator").forEach((button) => {
   });
 });
 
-// Handle tombol "=" untuk menghitung
 document.getElementById("equal").addEventListener("click", () => {
   if (previousInput === "" || currentInput === "" || operator === "") return;
 
-  let result = 0; // Inisialisasi result dengan nilai default
+  let result = 0;
   let prev = parseFloat(previousInput);
   let curr = parseFloat(currentInput);
 
@@ -72,7 +69,7 @@ document.getElementById("equal").addEventListener("click", () => {
       break;
     case "/":
       if (curr === 0) {
-        result = "Error"; // Menangani pembagian dengan nol
+        result = "Error";
       } else {
         result = prev / curr;
       }
@@ -84,7 +81,7 @@ document.getElementById("equal").addEventListener("click", () => {
       result = Math.pow(prev, curr);
       break;
     default:
-      result = "Error"; // Menangani operator tidak dikenal
+      result = "Error";
   }
 
   currentInput = result.toString();
@@ -94,13 +91,11 @@ document.getElementById("equal").addEventListener("click", () => {
   console.log("hasil :", result);
 
 
-  // Reset setelah perhitungan
-  previousInput = "";
-  operator = "";
-  calculationString = "";
+  // previousInput = "";
+  // operator = "";
+  // calculationString = "";
 });
 
-// Handle tombol "C" untuk reset
 document.getElementById("clear").addEventListener("click", () => {
   currentInput = "";
   previousInput = "";
@@ -111,7 +106,6 @@ document.getElementById("clear").addEventListener("click", () => {
   console.log("clear clicked")
 });
 
-// Handle tombol desimal
 document.querySelector(".decimal").addEventListener("click", () => {
   if (!currentInput.includes(".")) {
     currentInput += ".";
