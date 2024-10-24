@@ -21,7 +21,6 @@ function sendNotification(taskTitle, taskText) {
     }
 }
 
-// Fungsi add tasks to list
 document.getElementById('add-task').addEventListener('click', function() {
     const taskTitleInput = document.getElementById('new-title-task');
     const taskInput = document.getElementById('new-task');
@@ -41,7 +40,6 @@ document.getElementById('add-task').addEventListener('click', function() {
     }
 });
 
-// Fungsi add task & add to schedule notif
 function addTask(taskTitle, taskText, taskDate) {
     const taskList = document.getElementById('task-list');
 
@@ -55,7 +53,12 @@ function addTask(taskTitle, taskText, taskDate) {
     deleteBtn.textContent = 'Delete';
     deleteBtn.className = 'delete-btn';
 
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Edit';
+    editBtn.className = 'edit-btn';
+
     li.appendChild(taskInfo);
+    li.appendChild(editBtn);
     li.appendChild(deleteBtn);
 
     taskList.appendChild(li);
@@ -63,6 +66,10 @@ function addTask(taskTitle, taskText, taskDate) {
     deleteBtn.addEventListener('click', function() {
         taskList.removeChild(li);
     });
+
+    editBtn.addEventListener('click', function() {
+        taskList.contentEditable(li, true);
+    })
 
     // Jadwalkan notifikasi sesuai dengan waktu yang diatur
     scheduleNotification(taskTitle, taskText, taskDate);

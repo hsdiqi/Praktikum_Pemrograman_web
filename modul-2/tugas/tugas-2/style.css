@@ -114,3 +114,17 @@ li input[type="text"] {
 .delete-btn:hover {
     background-color: #c0392b;
 }
+
+.edit-btn {
+    background-color: #3ce756;
+    border: none;
+    color: #000000;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.edit-btn:hover {
+    background-color: #2b7fc0;
+}
