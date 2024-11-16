@@ -24,13 +24,20 @@ class Product extends DatabaseConfig {
     public function findAll() {
         $sql = "SELECT * FROM products";
         $result = $this->conn->query($sql);
-        
-        // Menyimpan data hasil query
+    
+        if (!$result) {
+            throw new \Exception("Query error: " . $this->conn->error);
+        }
+    
         $data = [];
         while ($row = $result->fetch_assoc()) {
+            if (isset($row['image'])) {
+                // Konversi kolom image ke format Base64 jika kolom image ada
+                $row['image'] = base64_encode($row['image']);
+            }
             $data[] = $row;
         }
-
+    
         return $data;
     }
 
@@ -49,9 +56,9 @@ class Product extends DatabaseConfig {
     
     // Menambahkan produk baru
     public function create($data) {
-        // Menggunakan 'product_name' yang sesuai dengan nama kolom di database
-        $productName = $data['product_name']; // Perbaiki nama kolom
-        $query = "INSERT INTO products (product_name) VALUES (?)"; // Gunakan 'product_name'
+        // Menggunakan 'name' yang sesuai dengan nama kolom di database
+        $productName = $data['name']; // Perbaiki nama kolom
+        $query = "INSERT INTO products (name) VALUES (?)"; // Gunakan 'name'
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("s", $productName);
         $stmt->execute();
@@ -64,11 +71,11 @@ class Product extends DatabaseConfig {
             return false;
         }
     
-        // Ambil nilai product_name dari array $data
-        $productName = $data['product_name']; // Menggunakan nama kolom yang benar
+        // Ambil nilai name dari array $data
+        $productName = $data['name']; // Menggunakan nama kolom yang benar
     
         // Query untuk memperbarui produk
-        $query = "UPDATE products SET product_name = ? WHERE id = ?";
+        $query = "UPDATE products SET name = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("si", $productName, $id);
         $stmt->execute();
