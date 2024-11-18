@@ -17,7 +17,7 @@ $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 if (strpos($path, "/api/product/") === 0) {
     $id = str_replace("/api/product/","", $path);
 }else {
-    echo json_encode(["message" => "Brand parameter is required."]);
+    echo json_encode(["message" => "Id parameter is required."]);
     exit;
 }
 
