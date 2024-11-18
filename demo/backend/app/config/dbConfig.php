@@ -1,6 +1,6 @@
 <?php
 
-namespace Demo\Backend\Config;
+namespace App\Config;
 
 class DbConfig {
     private $host = "localhost";

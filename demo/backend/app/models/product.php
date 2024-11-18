@@ -1,10 +1,9 @@
 <?php
 
-namespace Demo\Backend\Models;
+namespace App\Models;
 
 class Product {
     private $conn;
-    private $table = "products";
 
     public $id;
     public $name;
@@ -29,19 +28,44 @@ class Product {
         $category = $data["category"];
         $stok = $data["stok"];
         $muchBought = $data["muchBought"];
-        
+    
         // Jika gambar diterima dalam format base64, ubah ke binary
         $image = base64_decode($data["image"]);
     
         $query = "INSERT INTO products (name, brand, description, price, category, stok, muchBought, image) 
-                  VALUES (:name, :brand, :description, :price, :category, :stok, :muchBought, :image)";
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        
         $stmt = $this->conn->prepare($query);
     
-        $stmt->bind_param("ssss", $name, $description, $brand, $category);
-        $stmt->bind_param("ii", $muchBought, $stok);
-        $stmt->bind_param("d", $price);
-        $stmt->bind_param("b", $image);  // Bind image as binary data
+        if ($stmt === false) {
+            die("Prepare failed: " . $this->conn->error);
+        }
     
+        // Bind semua parameter dalam satu pemanggilan
+        $stmt->bind_param("ssssiiib", $name, $brand, $description, $category, $stok, $muchBought, $price, $image);
+    
+        // Eksekusi query
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            die("Execution failed: " . $stmt->error);
+        }
+    }
+    
+    public function createName($data) {
+        $name = $data["name"];
+        $brand = $data["brand"];
+
+        $query = "INSERT INTO products (name, brand) VALUES (?, ?)";
+
+        $stmt = $this->conn->prepare($query);
+
+        if ($stmt === false) {
+            die("Prepare failed: " . $this->conn->error);
+        }
+
+        $stmt->bind_param("ss", $name, $brand);
+
         return $stmt->execute();
     }
     
@@ -129,7 +153,7 @@ class Product {
         $category = $data["category"];
         $stok = $data["stok"];
         $muchBought = $data["muchBought"];
-        $image = $data["image"];
+        $image = base64_decode($data["image"]);
     
         // Query update dengan placeholder ?
         $query = "UPDATE products SET name = ?, brand = ?, description = ?, price = ?, category = ?, stok = ?, muchBought = ?, image = ? WHERE id = ?";
@@ -165,7 +189,7 @@ class Product {
 
     // Buy product
     public function buyProduc($id){
-        $query = "UPDATE products SET stok = stok - 1, muchBought = muchBought + 1 WHERE id = :id";
+        $query = "UPDATE products SET stok = stok - 1, muchBought = muchBought + 1 WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $id);
 

@@ -1,11 +1,12 @@
 <?php
 
 header("Content-Type: application/json");
-include_once '../config/dbConfig.php';
-include_once '../models/Product.php';
 
-use Demo\Backend\Config\DbConfig;
-use Demo\Backend\Models\Product;
+include  "./app/config/dbConfig.php";
+include "./app/models/product.php";
+
+use App\Config\DbConfig;
+use App\Models\Product;
 
 $database = new DbConfig();
 $db = $database->getConnection();
@@ -18,3 +19,7 @@ if (empty($products)) {
 } else {
     echo json_encode($products); // Langsung encode hasil dari `readAll()`
 }
+
+
+var_dump(__DIR__);
+var_dump(class_exists('App\Config\DbConfig'));

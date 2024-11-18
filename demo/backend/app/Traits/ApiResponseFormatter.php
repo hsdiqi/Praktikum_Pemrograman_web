@@ -1,6 +1,7 @@
 <?php 
 
-namespace Demo\Backend\Traits;
+// namespace ;
+namespace App\Traits;
 
 trait ApiResponseFormatter
 {

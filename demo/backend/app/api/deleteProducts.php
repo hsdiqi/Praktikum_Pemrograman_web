@@ -4,8 +4,8 @@ header("Content-Type: application/json");
 include_once '../config/dbConfig.php';
 include_once '../models/Product.php';
 
-use Demo\Backend\Config\DbConfig;
-use Demo\Backend\Models\Product;
+use App\Config\DbConfig;
+use App\Models\Product;
 
 $database = new DbConfig();
 $db = $database->getConnection();

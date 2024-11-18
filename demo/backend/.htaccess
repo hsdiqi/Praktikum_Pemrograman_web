@@ -1,0 +1,9 @@
+# Aktifkan penulisan ulang URL
+RewriteEngine On
+
+# Abaikan file atau folder yang ada
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Alihkan semua request ke index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
