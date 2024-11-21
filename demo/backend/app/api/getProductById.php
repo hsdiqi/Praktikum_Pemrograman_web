@@ -1,8 +1,9 @@
 <?php
 
 header("Content-Type: application/json");
-include_once '../config/dbConfig.php';
-include_once '../models/Product.php';
+
+include  "./app/config/dbConfig.php";
+include "./app/models/product.php";
 
 use App\Config\DbConfig;
 use App\Models\Product;

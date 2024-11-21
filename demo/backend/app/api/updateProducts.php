@@ -50,6 +50,7 @@ if (empty($data->name) || empty($data->brand)) {
 $description = isset($data->description) ? $data->description : null;
 $price = isset($data->price) ? $data->price : null;
 $category = isset($data->category) ? $data->category : null;
+$tahun_rilis = isset($data->tahun_rilis) ? $data->tahun_rilis : null;
 $stok = isset($data->stok) ? $data->stok : null;
 $muchBought = isset($data->muchBought) ? $data->muchBought : null;
 $imageBinary = isset($data->image) ? base64_decode($data->image) : null;
@@ -70,6 +71,7 @@ $product = new Product($db);
 $product->name = $data->name;
 $product->brand = $data->brand;
 $product->description = $data->description;
+$product->tahun_rilis = $data->tahun_rilis;
 $product->price = $data->price;
 $product->category = $data->category;
 $product->stok = $data->stok;

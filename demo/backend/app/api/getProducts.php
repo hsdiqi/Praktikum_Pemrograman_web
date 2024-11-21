@@ -11,7 +11,7 @@ use App\Models\Product;
 $database = new DbConfig();
 $db = $database->getConnection();
 
-$product = new Product($db);
+$product = new Product(db: $db);
 $products = $product->readAll(); // `readAll()` mengembalikan array langsung
 
 if (empty($products)) {
@@ -21,5 +21,5 @@ if (empty($products)) {
 }
 
 
-var_dump(__DIR__);
-var_dump(class_exists('App\Config\DbConfig'));
+// var_dump(__DIR__);
+// var_dump(class_exists('App\Config\DbConfig'));

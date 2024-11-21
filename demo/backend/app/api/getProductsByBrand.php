@@ -33,5 +33,3 @@ if (empty($products)) {
 } else {
     echo json_encode($products);
 }
-
-?>

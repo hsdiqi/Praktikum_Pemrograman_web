@@ -4,7 +4,7 @@ namespace App\Config;
 
 class DbConfig {
     private $host = "localhost";
-    private $db_name = "prak_web";
+    private $db_name = "praktikum_web";
     private $username = "root";
     private $password = "";
 
