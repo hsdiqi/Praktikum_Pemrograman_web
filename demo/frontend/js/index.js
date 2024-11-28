@@ -1,48 +1,113 @@
-async function fetchProducts() {
-  try {
-    const response = await fetch("http://localhost:8000/api/allProducts"); // URL ke backend PHP
-    const data = await response.json();
-    console.log(data); // Pastikan data adalah array produk
+let lastFetchedData = null; // To store the last fetched data for comparison
 
-    // Sort produk berdasarkan tahun_rilis secara descending
-    const terbaru = data.sort((a, b) => b.tahun_rilis - a.tahun_rilis);
+const productTemplate = (product) => `
+    <div class="product-card" onclick="viewProductDetail(${product.id})">
+        <img src="${product.image}" alt="${product.name}">
+        <h4>${product.name}</h4>
+        <p class="price">${formatRupiah(product.price)}</p>
+        <p>Stok: ${product.stok}</p>
+        <button class="add-to-cart" data-id="${
+          product.id
+        }">Masukkan Keranjang</button>
+    </div>
+    `;
 
-    // Jika Anda ingin mengurutkan berdasarkan muchBought (pastikan properti 'muchBought' ada di data)
-    const bestSeller = data.sort((a, b) => b.muchBought - a.muchBought); 
-
-    renderCards(terbaru, "Terbaru");
-    renderCards(bestSeller, "Best Seller");
-  } catch (error) {
-    console.error("Error fetching products:", error);
+// Helper function to format the price to Indonesian Rupiah (Rp) with comma as decimal separator
+function formatRupiah(amount) {
+  amount = parseFloat(amount); // Convert to a floating point number
+  if (isNaN(amount) || amount === null || amount <= 0) {
+    return "Rp 0,00"; // Return default value if invalid
   }
+
+  let formattedAmount = amount.toFixed(2); // Ensure two decimal places
+  let [integerPart, decimalPart] = formattedAmount.split(".");
+
+  // Format the integer part with periods as thousands separators
+  integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+  // Return the formatted price with comma as decimal separator
+  return `Rp ${integerPart},${decimalPart}`;
 }
 
-function renderCards(products, section) {
-  const container = document.querySelector(`.products-section .product-grid`);
-  if (section === "Terbaru") {
-    container.innerHTML = ""; 
-  }
+// Function to fetch and render products
+function fetchAndRenderProducts() {
+  const popularProducts = document.getElementById("popular-products");
+  const newProducts = document.getElementById("new-products");
 
-  products.forEach((product) => {
-    const card = document.createElement("article");
-    card.className = "product-card";
+  fetch("http://localhost:8000/api/allProducts", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      console.log(response);
+      if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+      return response.json();
+    })
+    .then((data) => {
+      // Check if the fetched data has changed
+      console.log(data);
+      if (JSON.stringify(data) !== JSON.stringify(lastFetchedData)) {
+        lastFetchedData = data; // Update the last fetched data
+        const popular = data.slice(0, 4);
+        const latest = data.slice(4);
 
-    // Gunakan base64 jika ada, fallback ke gambar default
-    // const imageUrl =
-    //   product.image && product.image.startsWith("data:image/")
-    //     ? product.image
-    //     : "/frontend/assets/download.jpg";
+        renderProducts(popularProducts, popular);
+        renderProducts(newProducts, latest);
+      }
+    })
+    .catch((error) => console.error("Error fetching products:", error));
+}
 
-    card.innerHTML = `
-          <figure class="product-image-wrapper">
-            <img src="${product.image}" alt="${product.name}" class="product-image" />
-          </figure>
-          <h3 class="product-title">${product.name}</h3>
-          <button class="add-to-cart-btn">Masukkan keranjang</button>
-        `;
+function renderProducts(container, products) {
+  const promises = products.map((product) => {
+    const imageUrl = product.image
+      ? `data:image/jpeg;base64,${product.image}`
+      : "placeholder.jpg";
+    return Promise.resolve({ ...product, blobUrl: imageUrl });
+  });
 
-    container.appendChild(card);
+  Promise.all(promises).then((productsWithBlobs) => {
+    container.innerHTML = productsWithBlobs
+      .map((product) => productTemplate(product))
+      .join("");
+
+    document.querySelectorAll(".add-to-cart").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const productId = event.target.dataset.id;
+        addToCart(productId); // Add product to cart
+      });
+    });
   });
 }
 
-document.addEventListener("DOMContentLoaded", fetchProducts);
+// Function to add product to cart
+function addToCart(productId) {
+  fetch(`http://localhost:8000/api/buy/${productId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+      return response.json();
+    })
+    .then((data) => {
+      alert(`Product ${data.name} added to cart successfully!`);
+      fetchAndRenderProducts();
+    })
+    .catch((error) => console.error("Error adding to cart:", error));
+}
+
+function viewProductDetail(productId) {
+  window.location.href = `product-detail.html?id=${productId}`;
+}
+
+// Initial fetch
+document.addEventListener("DOMContentLoaded", () => {
+  fetchAndRenderProducts();
+
+  // Set interval to check for changes every 10 seconds
+  setInterval(fetchAndRenderProducts, 5000);
+});

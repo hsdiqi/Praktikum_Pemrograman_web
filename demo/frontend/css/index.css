@@ -72,6 +72,21 @@
   gap: 32px;
   flex-wrap: wrap;
 }
+.product-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
 .product-card {
   border-radius: 5px;
   background-color: #e4feff;

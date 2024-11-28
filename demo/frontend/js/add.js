@@ -46,3 +46,34 @@ async function sendProductData(productData) {
       document.getElementById('responseMessage').innerHTML = `<p class="error">Terjadi kesalahan: ${error.message}</p>`;
   }
 }
+
+
+
+
+// document.getElementById('addProductForm').addEventListener('submit', async function (event) {
+//     event.preventDefault();
+
+//     // Ambil data dari form
+//     const formData = new FormData(event.target); // FormData otomatis menangani file input
+
+//     try {
+//         const response = await fetch('http://localhost:8000/api/addProduct', {
+//             method: 'POST',
+//             body: formData, // Kirim langsung FormData
+//         });
+
+//         if (!response.ok) {
+//             throw new Error('Gagal menambahkan produk');
+//         }
+//         console.log(formData);
+//         console.log(response)
+
+//         const result = await response.json();
+//         console.log(result)
+//         document.getElementById('responseMessage').innerHTML = `<p class="success">Produk berhasil ditambahkan!</p>`;
+//         document.getElementById('addProductForm').reset();
+//     } catch (error) {
+//         console.error('Error:', error);
+//         document.getElementById('responseMessage').innerHTML = `<p class="error">Terjadi kesalahan: ${error.message}</p>`;
+//     }
+// });

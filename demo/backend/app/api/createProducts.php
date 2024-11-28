@@ -18,7 +18,7 @@ $data = json_decode(file_get_contents("php://input"), true); // Menggunakan true
 
 // Memeriksa apakah data lengkap
 if (!isset($data['name']) || !isset($data['brand']) || !isset($data['description']) || !isset($data['price']) || !isset($data['category']) || !isset($data['tahun_rilis']) || !isset($data['stok']) || !isset($data['image'])) {
-    echo json_encode(["message" => "All fields are required."]);
+    echo json_encode(["message" => "All fields are required.", "data" => $data]);
     exit;
 }
 

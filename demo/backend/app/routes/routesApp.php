@@ -16,22 +16,21 @@ class routesApp
             return;
         }
 
-        if ($method === "GET" && strpos($path, "/api/allProducts/byBrand/") == 0) {
-            $brand = str_replace("/api/productsByBrand/", "", $path);
-            error_log("Nama Brand: " . $brand);
-
-            // Pastikan 'brand' valid
+        if ($method === "GET" && preg_match("#^/api/allProducts/byBrand/([^/]+)$#", $path, $matches)) {
+            $brand = $matches[1];
             if (empty($brand)) {
-                http_response_code(400);
+                // $this->(400, "Brand name is missing");
+                http_response_code(404);
                 echo json_encode(["message" => "Brand name is missing"]);
-                exit;
+                return;
             }
 
             include __DIR__ . "/../api/getProductsByBrand.php";
             return;
         }
 
-        if ($method === "GET" && strpos($path, "/api/product/") == 0) {
+        if ($method === "GET" && preg_match("#^/api/product/(\d+)$#", $path, $matches)) {
+            $id = $matches[1]; // Ambil ID dari path
             $id = str_replace("/api/product", "", $path);
             error_log("Id:" . $id);
 
@@ -41,7 +40,7 @@ class routesApp
                 exit;
             }
 
-            include __DIR__ . "./../api/getProductById.php";
+            include __DIR__ . "/../api/getProductById.php";
             return;
         }
 

@@ -25,48 +25,53 @@ class Product
     // Create product
     public function create($data)
     {
-        $query = "INSERT INTO products (name, brand, category, tahun_rilis, price, stok, image, description)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+        $name = $data["name"];
+        $brand = $data["brand"];
+        $description = $data["description"];
+        $price = $data["price"];
+        $category = $data["category"];
+        $stok = $data["stok"];
+        $muchBought = 0;
+        $tahun_rilis = $data["tahun_rilis"];
 
+        // Jika gambar diterima dalam format base64, ubah ke binary
+        // $image = base64_decode($data["image"]);
+        $image = $data['image'];
+
+        echo "data: " . $data;
+        $query = "INSERT INTO products (name, brand, category, tahun_rilis, price, stok, muchBought, image, description ) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
         $stmt = $this->conn->prepare($query);
 
+
         if ($stmt === false) {
-            error_log("Prepare failed: " . $this->conn->error);
-            http_response_code(500);
-            echo json_encode(["message" => "Database prepare failed.", "error" => $this->conn->error]);
-            return false;
+            die("Prepare failed: " . $this->conn->error);
         }
 
-        // Konversi tipe data
-        $price = (float)$data["price"];
-        $stok = (int)$data["stok"];
-        $tahun_rilis = (int)$data["tahun_rilis"];
-        $image = $data["image"]; // base64 string
-
+        // Bind semua parameter dalam satu pemanggilan
         $stmt->bind_param(
-            "sssissss",
-            $data["name"],
-            $data["brand"],
-            $data["category"],
-            $tahun_rilis,
-            $price,
-            $stok,
-            $image,
-            $data["description"]
+            "sssisiibs",
+            $name,          // s: string
+            $brand,         // s: string
+            $category,      // s: string
+            $tahun_rilis,   // i: integer
+            $price,         // s: float/double (mysql_real_escape_string better)
+            $stok,          // i: integer
+            $muchBought,    // i: integer
+            $image,         // b: blob (binary)
+            $description    // s: string
         );
 
+        // Eksekusi query
         if ($stmt->execute()) {
-            // http_response_code(201);
-            // echo json_encode(["message" => "Product created successfully."]);
+            // echo "Product created successfully.";    
+            echo json_encode(array("status" => "success", "message" => "Success", "data" => $data));
             return true;
         } else {
-            // error_log("Execution failed: " . $stmt->error);
-            http_response_code(500);
-            echo json_encode(["message" => "Failed to create product.", "error" => $stmt->error]);
-            return false;
+            error_log("Execution failed: " . $stmt->error);
+            die("Execution failed: " . $stmt->error);
         }
     }
-
 
     public function createName($data)
     {
@@ -90,7 +95,7 @@ class Product
     // Read all products
     public function readAll()
     {
-        $query = "SELECT id, name, tahun_rilis, muchBought, image FROM products";
+        $query = "SELECT id, name, price, stok, image, muchBought FROM products";
         $result = $this->conn->query($query);
 
         $data = [];
@@ -99,11 +104,6 @@ class Product
                 // Konversi kolom image ke format Base64 dengan MIME type
                 $row['image'] = "data:image/jpeg;base64," . base64_encode($row['image']);
             }
-            // else {
-            //     // Jika image kosong, gunakan placeholder
-            //     // $row['image'] = "data:image/jpeg;base64," . base64_encode(file_get_contents('path/to/placeholder.jpg'));
-            //     echo json_encode(["Message" => "Image not found"]);
-            // }
             $data[] = $row;
         }
         return $data;
@@ -133,7 +133,7 @@ class Product
 
     public function readById($id)
     {
-        $query = "SELECT * FROM products WHERE id = ?";
+        $query = "SELECT name, description, price, stok, image FROM products WHERE id = ?";
         $stmt = $this->conn->prepare($query);
 
         if (!$stmt) {
@@ -174,36 +174,38 @@ class Product
         // Ambil data dari array $data
         $name = $data["name"];
         $brand = $data["brand"];
-        $description = $data["description"];
-        $tahun_rilis = $data["tahun_rilis"];
-        $price = $data["price"];
-        $category = $data["category"];
-        $stok = $data["stok"];
-        $muchBought = $data["muchBought"];
-        $image = base64_decode($data["image"]);
+        // $description = $data["description"];
+        // $tahun_rilis = $data["tahun_rilis"];
+        // $price = $data["price"];
+        // $category = $data["category"];
+        // $stok = $data["stok"];
+        // $muchBought = $data["muchBought"];
+        // $image = base64_decode($data["image"]);
 
         // Query update dengan placeholder ?
-        $query = "UPDATE products SET name = ?, brand = ?, description = ?, price = ?, category = ?, stok = ?, muchBought = ?, image = ? WHERE id = ?";
+        // $query = "UPDATE products SET name = ?, brand = ?, description = ?, price = ?, category = ?, stok = ?, muchBought = ?, image = ? WHERE id = ?";
+        $query = "UPDATE products SET name = ?, brand = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);
 
         if (!$stmt) {
             die("Preparation failed: " . $this->conn->error);
         }
 
+        $stmt->bind_param("ssi", $name, $brand, $id) or die("Error". $this->conn->error);
         // Bind parameter ke query (menggunakan tipe data yang sesuai)
-        $stmt->bind_param(
-            "sssdsibii", // Tipe data: string, string, string, double, string, integer, integer, blob, integer
-            $name,
-            $brand,
-            $description,
-            $tahun_rilis,
-            $price,
-            $category,
-            $stok,
-            $muchBought,
-            $image,
-            $id
-        );
+        // $stmt->bind_param(
+        //     "sssidsibi", // Tipe data: string, string, string, double, string, integer, integer, blob, integer
+        //     $name,
+        //     $brand,
+        //     $description,
+        //     $tahun_rilis,
+        //     $price,
+        //     $category,
+        //     $stok,
+        //     $muchBought,
+        //     $image,
+        //     $id
+        // );
 
         // Eksekusi statement
         $result = $stmt->execute();

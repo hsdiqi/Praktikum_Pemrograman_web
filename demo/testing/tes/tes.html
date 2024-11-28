@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <style>
+        form {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #responseMessage {
+            color: green;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Management</h1>
+
+    <!-- Add Product -->
+    <form id="addProductForm">
+        <h2>Add Product</h2>
+        <label for="name">Product Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="brand">Brand:</label>
+        <input type="text" id="brand" name="brand" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" step="0.01">
+
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category">
+
+        <label for="stok">Stock:</label>
+        <input type="number" id="stok" name="stok">
+
+        <label for="muchBought">Much Bought:</label>
+        <input type="number" id="muchBought" name="muchBought">
+
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" accept="image/*">
+
+        <button type="submit">Add Product</button>
+        <p id="addResponse" class="error"></p>
+    </form>
+
+    <!-- Update Product -->
+    <form id="updateProductForm">
+        <h2>Update Product</h2>
+        <label for="updateId">Product ID:</label>
+        <input type="number" id="updateId" name="id" required>
+
+        <label for="updateName">Product Name:</label>
+        <input type="text" id="updateName" name="name">
+
+        <label for="updateBrand">Brand:</label>
+        <input type="text" id="updateBrand" name="brand">
+
+        <label for="updateDescription">Description:</label>
+        <textarea id="updateDescription" name="description"></textarea>
+
+        <label for="updatePrice">Price:</label>
+        <input type="number" id="updatePrice" name="price" step="0.01">
+
+        <label for="updateCategory">Category:</label>
+        <input type="text" id="updateCategory" name="category">
+
+        <label for="updateStok">Stock:</label>
+        <input type="number" id="updateStok" name="stok">
+
+        <label for="updateMuchBought">Much Bought:</label>
+        <input type="number" id="updateMuchBought" name="muchBought">
+
+        <label for="updateImage">Image:</label>
+        <input type="file" id="updateImage" name="image" accept="image/*">
+
+        <button type="submit">Update Product</button>
+        <p id="updateResponse" class="error"></p>
+    </form>
+
+    <!-- Delete Product -->
+    <form id="deleteProductForm">
+        <h2>Delete Product</h2>
+        <label for="deleteId">Product ID:</label>
+        <input type="number" id="deleteId" name="id" required>
+
+        <button type="submit">Delete Product</button>
+        <p id="deleteResponse" class="error"></p>
+    </form>
+
+    <script>
+        // Utility function to handle API requests
+        const handleApiRequest = async (url, method, data) => {
+            const options = {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            };
+
+            if (method === "DELETE") {
+                delete options.body;
+            }
+
+            const response = await fetch(url, options);
+            return response.json();
+        };
+
+        // Add Product Form Submission
+        document.getElementById('addProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+
+            const productData = {};
+            formData.forEach((value, key) => {
+                if (key !== "image") {
+                    productData[key] = value;
+                }
+            });
+
+            if (formData.get("image")) {
+                const file = formData.get("image");
+                const reader = new FileReader();
+                reader.onloadend = async () => {
+                    productData.image = reader.result.split(",")[1];
+                    const response = await handleApiRequest("http://localhost:8000/api/addProduct", "POST", productData);
+                    document.getElementById('addResponse').textContent = response.message || "Error occurred.";
+                };
+                reader.readAsDataURL(file);
+            } else {
+                const response = await handleApiRequest("http://localhost:8000/api/addProduct", "POST", productData);
+                document.getElementById('addResponse').textContent = response.message || "Error occurred.";
+            }
+        });
+
+        // Update Product Form Submission
+        document.getElementById('updateProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+
+            const id = formData.get("id");
+            const productData = {};
+            formData.forEach((value, key) => {
+                if (key !== "image" && key !== "id") {
+                    productData[key] = value;
+                }
+            });
+
+            if (formData.get("image")) {
+                const file = formData.get("image");
+                const reader = new FileReader();
+                reader.onloadend = async () => {
+                    productData.image = reader.result.split(",")[1];
+                    const response = await handleApiRequest(`http://localhost:8000/api/update/${id}`, "PUT", productData);
+                    document.getElementById('updateResponse').textContent = response.message || "Error occurred.";
+                };
+                reader.readAsDataURL(file);
+            } else {
+                const response = await handleApiRequest(`http://localhost:8000/api/update/${id}`, "PUT", productData);
+                document.getElementById('updateResponse').textContent = response.message || "Error occurred.";
+            }
+        });
+
+        // Delete Product Form Submission
+        document.getElementById('deleteProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('deleteId').value;
+            const response = await handleApiRequest(`http://localhost:8000/api/delete/${id}`, "DELETE");
+            document.getElementById('deleteResponse').textContent = response.message || "Error occurred.";
+        });
+    </script>
+</body>
+</html>

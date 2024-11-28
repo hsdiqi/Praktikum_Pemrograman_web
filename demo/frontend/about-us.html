@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERRA-BRAIN STORE</title>
+    <style>
+        /* General Reset */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+        }
+
+        header {
+            background-color: #1c1c1c;
+            padding: 1em 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+        }
+
+        .logo img {
+            max-width: 80px;
+            height: auto;
+        }
+
+        .logo h1 {
+            font-size: 1.5em;
+            color: white;
+            white-space: nowrap;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5em;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 2em 1em;
+            background-color: #1c1c1c;
+            margin-bottom: 2em;
+        }
+
+        main {
+            flex: 1;
+            margin: 25px;
+            /* Main content expands to fill available space */
+        }
+
+        .products {
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        .products h3 {
+            margin-bottom: 1em;
+            font-size: 1.5em;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5em;
+        }
+
+        .product-card {
+            background-color: #232323;
+            border-radius: 10px;
+            padding: 1em;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .add-to-cart {
+            display: inline-block;
+            margin-top: 1em;
+            padding: 0.5em 1em;
+            background-color: #1cbd1c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: #1c1c1c;
+            text-align: center;
+            padding: 1em 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                justify-content: center;
+            }
+
+            .logo {
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 1em;
+            }
+
+            .products h3 {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="/Demo/Frontend/asset/terra_brain_logo.png" alt="TERRA-BRAIN Logo">
+                <h1>TERRA-BRAIN STORE</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Catalog</a></li>
+                    <li><a href="ketentuan-garansi.html">Ketentuan Garansi</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <table class="content">
+            <tbody>
+                <tr>
+                    <td class="home-judul">
+                        <h1>About Us</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="normaltext">
+                        <p style="text-align: center;">&nbsp;<img style="width: 300px;
+  height: auto;" src="asset/terra_brain_logo.png"
+                                caption="false" width="125" height="107"></p>
+                        <p>Berdiri sejak tahun 2002, TERRA-BRAIN STORE telah 22 tahun melayani<br><br></p>
+                        <p><span style="color: #ff0000;"><strong>What Make Us Survive n keep growing?</strong></span>
+                        </p>
+                        <p><em>Religious, Brotherhood, Fun, and Hardwork to create the real Customer
+                                Satisfaction<br></em></p>
+                        <p>22 tahun bukanlah masa singkat, tanpa formula khusus kami tidak akan berhasil melewatinya.
+                            Pelayanan Customer yang prima tentu menjadi salah satu kunci utama untuk membangun bisnis
+                            jangka panjang. Namun bagi kami, pelayanan itu hampir mustahil dihadirkan dari 'jiwa-jiwa
+                            yang sakit' <em>. </em>Demikian juga ketika menghadapi masa-masa sulit, ketahanan tinggi
+                            untuk melewatinya adalah mustahil tanpa 'sandaran' yang tepat.</p>
+                        <p>Kami percaya bahwa ketahanan bisnis jangka panjang harus diwujudkan mulai dari kesehatan
+                            internal. Kami juga yakin bahwa pelayanan yang terbaik hanya bisa dilahirkan dari pribadi
+                            yang waras. Karenanya, sungguh-sungguh kami junjung tinggi nilai-nilai pusaka -
+                            <em>Religious, Brotherhood, Fun, and Hardwork</em></p>
+                        <p>&nbsp;</p>
+                        <p></p>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </main>
+
+    <footer>
+        <p>TERRA-BRAIN The Best Computer Shop</p>
+        <p>&copy; 2024 TERRA-BRAIN</p>
+    </footer>
+</body>
+
+</html>
