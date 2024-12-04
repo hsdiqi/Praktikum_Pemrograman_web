@@ -76,7 +76,7 @@ class PostController extends Controller
 
     public function destroy($id) {
         $post = Post::find($id);
-        Storage::delete('public/posts/', basename($post->image));
+        Storage::delete('public/posts/' . basename($post->image));
 
         $post->delete();
 
