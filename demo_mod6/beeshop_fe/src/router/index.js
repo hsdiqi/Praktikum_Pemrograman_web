@@ -1,15 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const Home = () => import('../views/Home.vue')
-// const About = () => import('../views/About.vue')
+const About = () => import('../views/aboutUs.vue')
+const Support = () => import('../views/support.vue')
 const Catalog = () => import('../views/catalog.vue')
+
 const Login = () => import('../views/auth/login.vue')
 const Register = () => import('../views/auth/register.vue')
+
 const Admin = () => import('../views/admin/dashboard.vue')
 const AddProduct = () => import('../views/admin/create.vue')
 const EditProduct = () => import('../views/admin/update.vue')
-const Profile = () => import('../views/customer/profile.vue')
 const AdminProduct = () => import('../views/admin/products.vue')
+
+const Profile = () => import('../views/customer/profile.vue')
+const Cart = () => import('../views/customer/cart.vue')
 
 const routes = [ 
     { 
@@ -20,6 +25,16 @@ const routes = [
         path: '/catalog',
         name: 'catalog',
         component: Catalog
+    },
+    {
+        path: '/about',
+        name: 'about',
+        component: About
+    },
+    {
+        path: '/support',
+        name: 'support',
+        component: Support
     },
     {
         path: '/login',
@@ -55,6 +70,11 @@ const routes = [
         path: '/customer/profile',
         name: 'profile',
         component: Profile
+    },
+    {
+        path: '/customer/cart',
+        name: 'cart',
+        component: Cart
     }
 
 ] 
@@ -64,5 +84,5 @@ const router = createRouter({
     history: createWebHistory(), 
     routes // <-- routes, 
 }) 
- 
+
 export default router 

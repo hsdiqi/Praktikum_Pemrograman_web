@@ -7,7 +7,7 @@ use App\Http\Resources\Resources;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-// use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -36,6 +36,7 @@ class CartController extends Controller
                 'category' => $item->product->category,
                 'price' => $item->product->price,
                 'stok' => $item->product->stok,
+                'image' => $item->product->image,
                 'quantity' => $item->quantity,
                 'total_price' => $item->product->price * $item->quantity,
             ];
@@ -49,19 +50,19 @@ class CartController extends Controller
     {
         
         $validator = Validator::make($request->all(), [
-            'id_customer' => 'required|exists:customers,id',
-            'id_product' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
+            'customer_id' => 'required|exists:customers,id',
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1'
         ]);
         
-        // Log::info($request->all());
+        Log::info($request->all());
         
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        $cart = Cart::where('id_customer', $request->id_customer)
-            ->where('id_product', $request->id_product)
+        $cart = Cart::where('customer_id', $request->customer_id)
+            ->where('product_id', $request->product_id)
             ->first();
 
         if ($cart) {
@@ -69,8 +70,8 @@ class CartController extends Controller
             $cart->save();
         } else {
             $cart = Cart::create([
-                'id_customer' => $request->id_customer,
-                'id_product' => $request->id_product,
+                'customer_id' => $request->customer_id,
+                'product_id' => $request->product_id,
                 'quantity' => $request->quantity,
             ]);
         }

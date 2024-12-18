@@ -10,21 +10,21 @@
                 Dashboard
               </router-link>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <router-link class="nav-link active" to="/admin/products">
                 Products
               </router-link>
-            </li>
-            <li class="nav-item">
+            </li> -->
+            <!-- <li class="nav-item">
               <router-link class="nav-link" to="/admin/customers">
                 Customers
               </router-link>
-            </li>
-            <li class="nav-item">
+            </li> -->
+            <!-- <li class="nav-item">
               <router-link class="nav-link" to="/admin/orders">
                 Orders
               </router-link>
-            </li>
+            </li> -->
           </ul>
         </div>
       </nav>
@@ -39,7 +39,7 @@
 
         <!-- Products Table -->
         <div class="table-responsive">
-          <table class="table table-striped">
+          <table class="table table-dark table-striped">
             <thead>
               <tr>
                 <th>Image</th>

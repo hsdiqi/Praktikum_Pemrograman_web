@@ -16,4 +16,3 @@ Route::get('/home', [Api\ProductController::class, 'home']);
 Route::get('/catalog', [Api\ProductController::class, 'catalog']);
 Route::post('/register', [Api\AuthController::class, 'register']);
 Route::post('/login', [Api\AuthController::class, 'login']);
-

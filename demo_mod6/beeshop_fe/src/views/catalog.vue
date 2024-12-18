@@ -180,8 +180,8 @@ export default {
         },
         async confirmAddToCart() {
             const payload = {
-                id_customer: parseInt(this.idUser),
-                id_product: parseInt(this.selectedProduct.id),
+                customer_id: parseInt(this.idUser),
+                product_id: parseInt(this.selectedProduct.id),
                 quantity: parseInt(this.selectedProductQuantity),
             };
 

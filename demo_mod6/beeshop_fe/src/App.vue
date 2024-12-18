@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="bg-dark">
-    <!-- Navbar hanya ditampilkan jika bukan halaman login atau register -->
+    <!-- Navbar hanya ditampilkan jika bukan halaman login, register, atau admin -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" v-if="!isLoginPage && !isRegisterPage && !isAdminPage">
       <div class="container">
         <router-link class="navbar-brand text-warning" to="/">Bee Shoop</router-link>
@@ -25,7 +25,7 @@
           <div class="d-flex">
             <router-link v-if="!isLoggedIn" to="/login" class="btn btn-success">Login</router-link>
             <div v-else class="d-flex align-items-center">
-              <router-link to="/cart" class="btn btn-outline-light me-2">
+              <router-link to="/customer/cart" class="btn btn-outline-light me-2">
                 Cart <span class="badge bg-warning text-dark">{{ cartCount }}</span>
               </router-link>
               <div class="dropdown">
@@ -34,7 +34,6 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                   <li><router-link class="dropdown-item" to="/customer/profile">Profile</router-link></li>
-                  <li><router-link class="dropdown-item" to="/orders">Orders</router-link></li>
                   <li>
                     <hr class="dropdown-divider">
                   </li>
@@ -50,7 +49,7 @@
     <!-- Konten Halaman -->
     <router-view></router-view>
 
-    <!-- Footer hanya ditampilkan jika bukan halaman login atau register -->
+    <!-- Footer hanya ditampilkan jika bukan halaman login, register, atau admin -->
     <footer class="bg-dark text-light py-4 mt-5" v-if="!isLoginPage && !isRegisterPage && !isAdminPage">
       <div class="container">
         <div class="row">
@@ -68,16 +67,17 @@
 </template>
 
 <script>
+import api from './api';
+
 export default {
   name: 'App',
   data() {
     return {
-      isLoggedIn: false,
-      cartCount: 0,
-    }
+      cartCount: 0, // Jumlah barang di keranjang
+    };
   },
   computed: {
-    // Cek apakah halaman saat ini adalah login atau register
+    // Cek apakah halaman saat ini adalah login, register, atau admin
     isLoginPage() {
       return this.$route.path === '/login';
     },
@@ -88,22 +88,51 @@ export default {
       return this.$route.path.startsWith('/admin');
     },
     isLoggedIn() {
-      return !!localStorage.getItem('token')
+      return !!localStorage.getItem('token');
     },
     username() {
       return localStorage.getItem('userName') || 'Guest';
-    }
+    },
   },
   methods: {
+    // Ambil jumlah barang di keranjang
+    async fetchCartCount() {
+      try {
+        const id = localStorage.getItem('idUser'); // Ambil id user dari localStorage
+        if (!id) {
+          console.error('ID user tidak ditemukan!');
+          return;
+        }
+
+        // Panggil API untuk mendapatkan data keranjang berdasarkan id
+        const response = await api.get(`/api/cart/${id}`);
+        const totalProduct = response.data.data;
+
+        // Pastikan totalProduct valid dan hitung jumlah barang
+        if (Array.isArray(totalProduct)) {
+          this.cartCount = totalProduct.reduce((total, item) => total + (item.quantity || 0), 0);
+        } else {
+          console.error('Data keranjang tidak valid!');
+        }
+      } catch (error) {
+        console.error('Terjadi kesalahan saat menghitung barang di keranjang:', error);
+      }
+    },
     logout() {
-      this.isLoggedIn = false;
       localStorage.removeItem('token');
       localStorage.removeItem('idUser');
-      localStorage.removeItem('userName')
+      localStorage.removeItem('userName');
+      this.cartCount = 0; // Reset jumlah barang
       this.$router.push('/login');
+    },
+  },
+  mounted() {
+    // Ambil jumlah barang di keranjang saat komponen dimuat
+    if (this.isLoggedIn) {
+      this.fetchCartCount();
     }
-  }
-}
+  },
+};
 </script>
 
 <style>
