@@ -4,7 +4,7 @@
       <h2 class="mb-4 text-light">Terbaru</h2>
       <div class="row g-4">
         <div v-for="product in latestProducts" :key="product.id" class="col-md-3">
-          <div class="card mb-4 h-100 p-1">
+          <div class="card mb-4 h-100 p-1" @click="goToProductDetail(product.id)">
             <img :src="product.image" class="card-img-top fixed-image" :alt="product.name">
             <div class="card-body">
               <h5 class="card-title text-truncate"
@@ -25,7 +25,7 @@
       <h2 class="mb-4 text-light">Best Seller</h2>
       <div class="row g-4">
         <div v-for="product in bestSellers" :key="product.id" class="col-md-3">
-          <div class="card mb-4 h-100 p-1">
+          <div class="card mb-4 h-100 p-1" @click="goToProductDetail(product.id)">
             <img :src="product.image" class="card-img-top fixed-image" :alt="product.name">
             <div class="card-body">
               <h5 class="card-title text-truncate">{{ product.name }}</h5>
@@ -73,6 +73,12 @@ export default {
     },
     formatPrice(price) {
       return price.toLocaleString('id-ID');
+    }, goToProductDetail(productId) {
+      if (!productId) {
+        console.error("Invalid product ID:", productId);
+        return;
+      }
+      this.$router.push({ path: '/detail', query: { id: productId } });
     },
     addToCart(product) {
       console.log(`Added ${product.id} to cart!`);

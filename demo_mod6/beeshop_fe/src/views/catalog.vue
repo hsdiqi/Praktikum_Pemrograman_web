@@ -31,17 +31,17 @@
             <div v-for="product in paginatedProducts" :key="product.id" class="col-md-3 col-sm-6 mb-3">
                 <div class="card bg-secondary h-100 product-card">
                     <img :src="product.image" class="card-img-top product-image" :alt="product.name" />
-                    <div class="card-body d-flex flex-column p-2">
+                    <div class="card-body d-flex flex-column p-2" @click="goToProductDetail(product.id)">
                         <h6 class="card-title mb-1">{{ product.name }}</h6>
                         <p class="card-text small mb-1">{{ product.brand }}</p>
                         <p class="card-text mb-1"><strong>Rp{{ formatPrice(product.price) }}</strong></p>
                         <p class="card-text small flex-grow-1 mb-2">
                             {{ truncateDescription(product.description) }}
                         </p>
-                        <button class="btn btn-primary btn-sm mt-auto" @click="addToCart(product)">
-                            Add to Cart
-                        </button>
                     </div>
+                    <button class="btn btn-primary btn-sm mt-auto" @click="addToCart(product)">
+                        Add to Cart
+                    </button>
                 </div>
             </div>
         </div>
@@ -167,6 +167,12 @@ export default {
         },
         truncateDescription(description) {
             return description.length > 50 ? description.substring(0, 47) + "..." : description;
+        }, goToProductDetail(productId) {
+            if (!productId) {
+                console.error("Invalid product ID:", productId);
+                return;
+            }
+            this.$router.push({ path: '/detail', query: { id: productId } });
         },
         addToCart(product) {
             if (this.isLoggedIn) {
@@ -219,6 +225,7 @@ export default {
                 this.currentPage = page;
             }
         },
+
     },
 };
 </script>

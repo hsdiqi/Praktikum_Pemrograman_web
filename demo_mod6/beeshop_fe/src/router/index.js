@@ -4,6 +4,7 @@ const Home = () => import('../views/Home.vue')
 const About = () => import('../views/aboutUs.vue')
 const Support = () => import('../views/support.vue')
 const Catalog = () => import('../views/catalog.vue')
+const Detail = () => import('../views/detailProduct.vue')
 
 const Login = () => import('../views/auth/login.vue')
 const Register = () => import('../views/auth/register.vue')
@@ -35,6 +36,10 @@ const routes = [
         path: '/support',
         name: 'support',
         component: Support
+    },{
+        path: '/detail',
+        name: 'detail',
+        component: Detail
     },
     {
         path: '/login',

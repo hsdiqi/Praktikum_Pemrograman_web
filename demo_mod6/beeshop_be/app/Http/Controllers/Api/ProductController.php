@@ -161,7 +161,7 @@ class ProductController extends Controller
         $sortBy = $request->get('sort_by', 'year'); 
         $order = $request->get('order', 'desc');
 
-        $query = Product::select('name', 'image', 'stock', 'bought', 'year', 'price');
+        $query = Product::select('id','name', 'image', 'stock', 'bought', 'year', 'price');
 
         if ($sortBy == 'year') {
             $query->orderBy('year', $order);
@@ -184,7 +184,7 @@ class ProductController extends Controller
         $sortBy = $request->get('sort_by', 'year'); 
         $order = $request->get('order', 'desc');     
 
-        $query = Product::select('name', 'image', 'stock', 'bought', 'year', 'price');
+        $query = Product::select('id','name', 'image', 'stock', 'bought', 'year', 'price');
 
         if ($sortBy == 'year') {
             $query->orderBy('year', $order);
